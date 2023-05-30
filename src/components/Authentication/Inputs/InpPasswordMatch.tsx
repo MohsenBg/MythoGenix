@@ -52,7 +52,7 @@ export default function InpPasswordMatch({ register, error, size }: Props) {
         margin="normal"
         fullWidth
         type={showPass ? "text" : "password"}
-        id="password"
+        id="Confirm password"
         label="Confirm Password *"
         size={!size ? "medium" : size}
         color={error.confirmPassword ? "error" : "primary"}

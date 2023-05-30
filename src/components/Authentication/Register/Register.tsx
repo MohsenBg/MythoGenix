@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { FromRegister } from "@/interfaces/IFromRegister";
 import FormHookDev from "@/components/Helpers/FormHookDev";
 import InpPasswordMatch from "../Inputs/InpPasswordMatch";
+
 import {
   validateEmailDisposable,
   validateEmailFormat,
@@ -54,87 +55,84 @@ export default function Register() {
   };
 
   return (
-    <Grid
-      container
-      component={Paper}
-      sx={{ minHeight: "100%" }}
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-    >
-      <Grid
-        xl={3}
-        lg={4}
-        md={6}
-        sm={8}
-        xs={10}
-        item
+    <>
+      <Box
         component={Paper}
-        borderRadius={1}
-        elevation={8}
-        square
-        py={2}
+        sx={{
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
       >
-        <Stack
-          spacing={1.5}
-          component="form"
-          onSubmit={handleSubmit(onSubmit)}
-          sx={{
-            mx: 4,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
+        <Box
+          sx={{ height: "100%", width: "100%", maxWidth: "600px" }}
+          component={Paper}
+          elevation={8}
+          square
+          py={2}
         >
-          <RegisterHeader />
-          <InpUsername
-            size="small"
-            register={register("username", {
-              validate: usernameValidation,
-            })}
-            error={errors.username}
-          />
-          <InpEmail
-            size="small"
-            register={register("email", {
-              validate: emailValidation,
-            })}
-            error={errors.email}
-          />
-
-          <InpPasswordMatch
-            size="small"
-            register={{
-              password: register("password", {
-                validate: passwordValidation,
-              }),
-              confirmPassword: register("confirmPassword", {
-                required: "Confirm Password required.",
-                validate: {
-                  confirmPassword: (confirmPassword) =>
-                    validateConfirmPassword(confirmPassword, watch("password")),
-                },
-              }),
+          <Stack
+            spacing={1}
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{
+              mx: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
-            error={{
-              password: errors.password,
-              confirmPassword: errors.confirmPassword,
-            }}
-          />
-
-          <Button
-            type="submit"
-            fullWidth
-            color="primary"
-            variant="contained"
-            sx={{ my: 2 }}
           >
-            Sign In
-          </Button>
-          <RegisterFooter />
-        </Stack>
-      </Grid>
+            <RegisterHeader />
+            <InpUsername
+              register={register("username", {
+                validate: usernameValidation,
+              })}
+              error={errors.username}
+            />
+            <InpEmail
+              register={register("email", {
+                validate: emailValidation,
+              })}
+              error={errors.email}
+            />
+
+            <InpPasswordMatch
+              register={{
+                password: register("password", {
+                  validate: passwordValidation,
+                }),
+                confirmPassword: register("confirmPassword", {
+                  required: "Confirm Password required.",
+                  validate: {
+                    confirmPassword: (confirmPassword) =>
+                      validateConfirmPassword(
+                        confirmPassword,
+                        watch("password")
+                      ),
+                  },
+                }),
+              }}
+              error={{
+                password: errors.password,
+                confirmPassword: errors.confirmPassword,
+              }}
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              color="primary"
+              variant="contained"
+              sx={{ my: 2 }}
+            >
+              Sign In
+            </Button>
+            <RegisterFooter />
+          </Stack>
+        </Box>
+      </Box>
       <FormHookDev control={control} />
-    </Grid>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 import { Box, ThemeProvider, createTheme } from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
+import { CssBaseline } from "@mui/material";
 import NavBar from "../Navbar/Navbar";
 
 const muiTheme = createTheme({

@@ -20,7 +20,7 @@ export default function Login() {
 
   return (
     <>
-      <Grid container component="div" style={{ height: "100%" }}>
+      <Grid container component="div" sx={{ height: "100%" }}>
         <Grid
           item
           xs={false}
