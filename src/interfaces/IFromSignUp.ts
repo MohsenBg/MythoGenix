@@ -1,4 +1,4 @@
-export interface FromRegister {
+export interface FromSignUp {
   username: string;
   email: string;
   password: string;

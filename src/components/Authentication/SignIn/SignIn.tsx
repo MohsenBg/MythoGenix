@@ -1,21 +1,37 @@
 "use client";
-import { Box, Button, Grid, Paper } from "@mui/material";
-import React from "react";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Grid,
+  Paper,
+  Typography,
+} from "@mui/material";
+import React, { useState } from "react";
 import InpUsername from "../Inputs/InpUsername";
 import InpPassword from "../Inputs/InpPassword";
-import LoginHeader from "./LoginHeader";
-import LoginFooter from "./LoginFooter";
+import SignInHeader from "./SignInHeader";
+import SignInFooter from "./SignInFooter";
 import { useForm } from "react-hook-form";
 import { FromLogin } from "@/interfaces/IFromLogin";
 import FormHookDev from "@/components/Helpers/FormHookDev";
+import { useRouter } from "next/navigation";
+import { signInSubmit } from "@/lib/submit/signInSubmit";
 
-export default function Login() {
+export default function SignIn() {
   const from = useForm<FromLogin>();
-  const { register, control, handleSubmit, formState } = from;
-  const { errors } = formState;
-
-  const onSubmit = (data: FromLogin) => {
-    console.log(data);
+  const { register, control, handleSubmit, formState, setValue } = from;
+  const { errors, isSubmitting } = formState;
+  const [signInError, setSignInError] = useState<string>(" ");
+  const route = useRouter();
+  const onSubmit = async (data: FromLogin) => {
+    const res = await signInSubmit(data);
+    if (res.ok) {
+      route.push("/");
+      return;
+    }
+    setSignInError(res.error || "");
+    setValue("password", "");
   };
 
   return (
@@ -38,7 +54,10 @@ export default function Login() {
           }}
         />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <LoginHeader />
+          <SignInHeader />
+          <Typography variant="h6" color="error" textAlign="center">
+            {signInError}
+          </Typography>
           <Box
             component="form"
             onSubmit={handleSubmit(onSubmit)}
@@ -67,11 +86,13 @@ export default function Login() {
               fullWidth
               color="primary"
               variant="contained"
+              disabled={isSubmitting}
+              startIcon={isSubmitting && <CircularProgress size={20} />}
               sx={{ my: 2 }}
             >
-              Sign In
+              {isSubmitting ? "" : "Sign In"}
             </Button>
-            <LoginFooter />
+            <SignInFooter />
           </Box>
         </Grid>
       </Grid>

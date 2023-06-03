@@ -1,3 +1,4 @@
+import Providers from "@/components/Common/Providers/Providers";
 import "./globals.css";
 import Theme from "@/components/Common/Theme/Theme";
 
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <Theme>{children}</Theme>
+        <Providers>
+          <Theme>{children}</Theme>
+        </Providers>
       </body>
     </html>
   );

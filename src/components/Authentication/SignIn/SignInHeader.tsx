@@ -3,7 +3,7 @@ import React from "react";
 import Avatar from "@mui/material/Avatar";
 import { Box, Typography } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-export default function LoginHeader() {
+export default function SignInHeader() {
   return (
     <Box
       sx={{

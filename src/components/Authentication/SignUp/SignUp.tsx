@@ -1,24 +1,37 @@
 "use client";
-import { Box, Button, Grid, Paper, Stack } from "@mui/material";
-import React from "react";
+import { FromLogin } from "@/interfaces/IFromLogin";
+import { signInSubmit } from "@/lib/submit/signInSubmit";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
+import React, { useState } from "react";
 import InpUsername from "../Inputs/InpUsername";
 import InpEmail from "../Inputs/InpEmail";
-import RegisterHeader from "./RegisterHeader";
-import RegisterFooter from "./RegisterFooter";
+import SignUpHeader from "./SignUpHeader";
+import SignUpFooter from "./SignUpFooter";
 import { useForm } from "react-hook-form";
-import { FromRegister } from "@/interfaces/IFromRegister";
+import { FromSignUp } from "@/interfaces/IFromSignUp";
 import FormHookDev from "@/components/Helpers/FormHookDev";
 import InpPasswordMatch from "../Inputs/InpPasswordMatch";
+import { signUpSubmit } from "@/lib/submit/signUpSubmit";
+import { useRouter } from "next/navigation";
 
 import {
   validateEmailDisposable,
   validateEmailFormat,
   validateRequiredEmail,
+  validateEmailUnique,
 } from "@/lib/validation/emailValidation";
 
 import {
   validateRequiredUsername,
   validateUsernameFormat,
+  validateUsernameUnique,
 } from "@/lib/validation/usernameValidation";
 
 import {
@@ -32,11 +45,13 @@ const emailValidation = {
   validateRequiredEmail,
   validateEmailDisposable,
   validateEmailFormat,
+  validateEmailUnique,
 };
 
 const usernameValidation = {
   validateRequiredUsername,
   validateUsernameFormat,
+  validateUsernameUnique,
 };
 
 const passwordValidation = {
@@ -45,13 +60,38 @@ const passwordValidation = {
   validatePasswordFormat,
 };
 
-export default function Register() {
-  const from = useForm<FromRegister>();
-  const { register, control, handleSubmit, formState, watch } = from;
-  const { errors } = formState;
+export default function SignUp() {
+  const from = useForm<FromSignUp>();
+  const { register, control, handleSubmit, formState, setValue, watch } = from;
+  const { errors, isSubmitting } = formState;
+  const [signUpError, setSignUpError] = useState<string>(" ");
+  const route = useRouter();
 
-  const onSubmit = (data: FromRegister) => {
-    console.log(data);
+  const signIn = async (data: FromLogin) => {
+    const res = await signInSubmit(data);
+    if (res.ok) {
+      route.push("/");
+      return;
+    }
+    route.push("/auth/sign-up");
+  };
+
+  const onSubmit = async (data: FromSignUp) => {
+    const res = await signUpSubmit({
+      ...data,
+    });
+
+    if (res.error) {
+      //error
+      setSignUpError(res.error);
+      setValue("password", "");
+      setValue("confirmPassword", "");
+      return;
+    }
+    await signIn({
+      username: data.username,
+      password: data.password,
+    });
   };
 
   return (
@@ -59,21 +99,29 @@ export default function Register() {
       <Box
         component={Paper}
         sx={{
-          height: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
         }}
       >
         <Box
-          sx={{ height: "100%", width: "100%", maxWidth: "600px" }}
+          sx={{
+            minHeight: "calc(100vh  -  64px)",
+            height: "100%",
+            width: "100%",
+            maxWidth: "600px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
           component={Paper}
           elevation={8}
           square
           py={2}
         >
           <Stack
-            spacing={1}
+            flexGrow={1}
+            spacing={2}
             component="form"
             onSubmit={handleSubmit(onSubmit)}
             sx={{
@@ -83,7 +131,10 @@ export default function Register() {
               alignItems: "center",
             }}
           >
-            <RegisterHeader />
+            <SignUpHeader />
+            <Typography variant="h6" color="error" textAlign="center">
+              {signUpError}
+            </Typography>
             <InpUsername
               register={register("username", {
                 validate: usernameValidation,
@@ -124,11 +175,13 @@ export default function Register() {
               fullWidth
               color="primary"
               variant="contained"
+              disabled={isSubmitting}
+              startIcon={isSubmitting && <CircularProgress size={20} />}
               sx={{ my: 2 }}
             >
-              Sign In
+              {isSubmitting ? "" : "Sign Up"}
             </Button>
-            <RegisterFooter />
+            <SignUpFooter />
           </Stack>
         </Box>
       </Box>

@@ -1,9 +1,11 @@
+import { fetchIsUsernameAvailable } from "../fetch/post/checkUsernamePost";
+
 const validateRequiredUsername = (username: string): boolean | string => {
   return username.length > 0 || "Username required.";
 };
 
 const validateUsernameFormat = (username: string): boolean | string => {
-  if (username.length <= 5) {
+  if (username.length < 5) {
     return "Username should be at least 5 characters.";
   }
   if (username.length > 15) {
@@ -12,13 +14,18 @@ const validateUsernameFormat = (username: string): boolean | string => {
   return true;
 };
 
-const validateUsernameQuick = () => {
-  // implement later
-  return true;
+const validateUsernameUnique = async (
+  username: string
+): Promise<boolean | string> => {
+  if (username.length >= 5) {
+    const res: { exists: boolean } = await fetchIsUsernameAvailable(username);
+    return !res.exists || "This username is not available.";
+  }
+  return validateUsernameFormat(username);
 };
 
 export {
   validateRequiredUsername,
   validateUsernameFormat,
-  validateUsernameQuick,
+  validateUsernameUnique,
 };

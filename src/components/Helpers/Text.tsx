@@ -7,7 +7,7 @@ export default function Text({ text }: { text: string }) {
     <Typography
       variant="h5"
       component="div"
-      m={2}
+      p={2}
       sx={{
         flexGrow: 1,
         textAlign: "center",

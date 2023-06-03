@@ -1,37 +1,55 @@
-"use client";
+import * as React from "react";
 import {
+  Typography,
+  Toolbar,
   AppBar,
   Box,
-  Button,
   IconButton,
-  Toolbar,
-  Typography,
+  Button,
+  Menu,
+  MenuItem,
 } from "@mui/material";
-import AdbIcon from "@mui/icons-material/Adb";
-import React from "react";
-import Link from "next/link";
 
-export default function NavBar({ navSize }: { navSize: number }) {
+import MenuIcon from "@mui/icons-material/Menu";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
+import { navBarSizePx } from "@/constants/sizeConstants";
+
+export default function Navbar() {
+  const { data: session } = useSession();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <Box sx={{ flexGrow: 1, mb: navSize / 8 }}>
-      <AppBar sx={{ height: navSize }}>
-        <Toolbar>
+    <>
+      <AppBar position="sticky">
+        <Toolbar
+        // sx={{ height: `${navBarSizePx}px` }}
+        >
           <IconButton
             size="large"
             edge="start"
             color="inherit"
-            aria-label="Logo"
+            aria-label="menu"
           >
-            <AdbIcon />
+            <MenuIcon />
           </IconButton>
           <Typography
             variant="h6"
-            component="div"
-            ml={1}
+            noWrap
+            component="a"
+            href="/"
             sx={{
+              display: { md: "flex" },
               flexGrow: 1,
-              mr: 2,
-              display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
@@ -41,11 +59,49 @@ export default function NavBar({ navSize }: { navSize: number }) {
           >
             LOGO
           </Typography>
-          <Link href={"/login"}>
-            <Button color="primary">Login</Button>
-          </Link>
+          {session && session.user ? (
+            <div>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <Box component="div" onClick={() => signOut()}>
+                    SignOut
+                  </Box>
+                </MenuItem>
+              </Menu>
+            </div>
+          ) : (
+            <Link href={"/auth/sign-in"}>
+              <Button color="primary">Login</Button>
+            </Link>
+          )}
         </Toolbar>
       </AppBar>
-    </Box>
+    </>
   );
 }

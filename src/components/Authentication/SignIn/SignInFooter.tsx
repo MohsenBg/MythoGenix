@@ -2,7 +2,7 @@
 import React from "react";
 import { Grid, Link as MuiLink } from "@mui/material";
 import NextLink from "next/link";
-export default function LoginFooter() {
+export default function SignInFooter() {
   return (
     <Grid container>
       <Grid item xs>
@@ -22,7 +22,7 @@ export default function LoginFooter() {
           component={NextLink}
           prefetch={false}
           //@ts-ignore
-          href={{ pathname: "/register" }}
+          href={{ pathname: "/auth/sign-up" }}
         >
           {"Don't have an account? Sign Up"}
         </MuiLink>

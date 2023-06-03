@@ -4,7 +4,7 @@ import Avatar from "@mui/material/Avatar";
 import { Box, Typography } from "@mui/material";
 import HowToRegIcon from "@mui/icons-material/HowToRegOutlined";
 
-export default function RegisterHeader() {
+export default function SignUpHeader() {
   return (
     <Box
       sx={{

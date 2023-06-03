@@ -1,3 +1,5 @@
+import { fetchIsEmailAvailable } from "../fetch/post/checkEmailPost";
+
 const validateRequiredEmail = (value: string): boolean | string => {
   return value.length > 0 || "Email address required.";
 };
@@ -32,4 +34,15 @@ const validateEmailDisposable = async (
   );
 };
 
-export { validateRequiredEmail, validateEmailFormat, validateEmailDisposable };
+const validateEmailUnique = async (
+  email: string
+): Promise<boolean | string> => {
+  const res: { exists: boolean } = await fetchIsEmailAvailable(email);
+  return !res.exists || "This email address is not available.";
+};
+export {
+  validateEmailUnique,
+  validateRequiredEmail,
+  validateEmailFormat,
+  validateEmailDisposable,
+};
