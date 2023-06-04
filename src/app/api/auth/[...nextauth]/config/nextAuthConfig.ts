@@ -1,3 +1,4 @@
+import { SIGN_IN_ROUTE } from "@/constants/routeConfig";
 import { fetchSingInUser } from "@/lib/fetch/post/signInPost";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -36,7 +37,7 @@ export const nextAuthOption: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: "/auth/signIn",
+    signIn: SIGN_IN_ROUTE,
   },
   session: {
     strategy: "jwt",

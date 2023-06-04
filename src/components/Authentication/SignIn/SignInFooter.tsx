@@ -2,6 +2,7 @@
 import React from "react";
 import { Grid, Link as MuiLink } from "@mui/material";
 import NextLink from "next/link";
+import { FORGET_PASSWORD_ROUTE, SIGN_UP_ROUTE } from "@/constants/routeConfig";
 export default function SignInFooter() {
   return (
     <Grid container>
@@ -11,7 +12,7 @@ export default function SignInFooter() {
           component={NextLink}
           prefetch={false}
           //@ts-ignore
-          href={{ pathname: "/" }}
+          href={{ pathname: `${FORGET_PASSWORD_ROUTE}` }}
         >
           Forgot password?
         </MuiLink>
@@ -22,7 +23,7 @@ export default function SignInFooter() {
           component={NextLink}
           prefetch={false}
           //@ts-ignore
-          href={{ pathname: "/auth/sign-up" }}
+          href={{ pathname: `${SIGN_UP_ROUTE}` }}
         >
           {"Don't have an account? Sign Up"}
         </MuiLink>

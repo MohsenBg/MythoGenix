@@ -1,7 +1,8 @@
+import { API_CHECK_EMAIL_ROUTE } from "@/constants/routeConfig";
 import { getUrlWithRoute } from "../url/apiUrl";
 
 export async function fetchIsEmailAvailable(email: string) {
-  const res = await fetch(getUrlWithRoute("/api/check-email"), {
+  const res = await fetch(getUrlWithRoute(API_CHECK_EMAIL_ROUTE), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
