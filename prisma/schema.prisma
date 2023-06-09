@@ -12,7 +12,17 @@ datasource db {
 
 model User {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
-  email    String @unique
+  email    Email?
   username String @unique
   password String
+}
+
+model Email {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  address         String    @unique
+  verified        Boolean   @default(false)
+  verifyToken     String?
+  verifyExpiresAt DateTime?
+  user            User      @relation(fields: [userId], references: [id])
+  userId          String    @unique @db.ObjectId
 }

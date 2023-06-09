@@ -17,6 +17,7 @@ import { FromLogin } from "@/interfaces/IFromLogin";
 import FormHookDev from "@/components/Helpers/FormHookDev";
 import { useRouter } from "next/navigation";
 import { signInSubmit } from "@/lib/submit/signInSubmit";
+import { HOME_ROUTE } from "@/constants/routeConfig";
 
 export default function SignIn() {
   const from = useForm<FromLogin>();
@@ -27,7 +28,7 @@ export default function SignIn() {
   const onSubmit = async (data: FromLogin) => {
     const res = await signInSubmit(data);
     if (res.ok) {
-      route.push("/");
+      route.push(HOME_ROUTE);
       return;
     }
     setSignInError(res.error || "");

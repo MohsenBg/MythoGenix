@@ -14,3 +14,5 @@ export const API_SIGN_OUT_ROUTE = "/api/sign-out";
 export const API_VERIFY_EMAIL_ROUTE = "/api/verify-email";
 export const API_CHECK_EMAIL_ROUTE = "/api/check-email";
 export const API_CHECK_USERNAME_ROUTE = "/api/check-username";
+export const API_SEND_VERIFY_EMAIL = "/api/send-verify-email";
+export const API_UPDATE_EMAIL = "/api/update-email";

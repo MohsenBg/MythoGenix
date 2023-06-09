@@ -40,6 +40,7 @@ import {
   validatePasswordFormat,
   validateConfirmPassword,
 } from "@/lib/validation/passwordValidation";
+import { SIGN_IN_ROUTE, DASHBOARD_ROUTE } from "@/constants/routeConfig";
 
 const emailValidation = {
   validateRequiredEmail,
@@ -70,10 +71,10 @@ export default function SignUp() {
   const signIn = async (data: FromLogin) => {
     const res = await signInSubmit(data);
     if (res.ok) {
-      route.push("/");
+      route.push(DASHBOARD_ROUTE);
       return;
     }
-    route.push("/auth/sign-up");
+    route.push(SIGN_IN_ROUTE);
   };
 
   const onSubmit = async (data: FromSignUp) => {
@@ -121,7 +122,7 @@ export default function SignUp() {
         >
           <Stack
             flexGrow={1}
-            spacing={2}
+            spacing={1.5}
             component="form"
             onSubmit={handleSubmit(onSubmit)}
             sx={{

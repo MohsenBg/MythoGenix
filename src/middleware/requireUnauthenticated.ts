@@ -1,16 +1,25 @@
-import { DASHBOARD_ROUTE, SIGN_IN_ROUTE } from "@/constants/routeConfig";
+import {
+  HOME_ROUTE,
+  SIGN_IN_ROUTE,
+  SIGN_UP_ROUTE,
+} from "@/constants/routeConfig";
 import { RedirectionOptions } from "@/interfaces/IRedirection";
 import { NextRequestWithAuth } from "next-auth/middleware";
 import { NextURL } from "next/dist/server/web/next-url";
 
-const protectedRoutes: RegExp[] = [new RegExp(`^${DASHBOARD_ROUTE}(/.*)?$`)];
+const protectedRoutes: RegExp[] = [
+  new RegExp(`^${SIGN_IN_ROUTE}(/.*)?$`),
+  new RegExp(`^${SIGN_UP_ROUTE}(/.*)?$`),
+];
 
-export function authMiddleware(req: NextRequestWithAuth): RedirectionOptions {
+export function requireUnauthenticated(
+  req: NextRequestWithAuth
+): RedirectionOptions {
   const { pathname } = req.nextUrl;
   for (const route of protectedRoutes) {
-    if (pathname.match(route) && !req.nextauth.token) {
+    if (pathname.match(route) && req.nextauth.token) {
       const url: NextURL = req.nextUrl.clone();
-      url.pathname = SIGN_IN_ROUTE;
+      url.pathname = HOME_ROUTE;
       return {
         enableRedirection: true,
         redirectUrl: url,

@@ -1,17 +1,16 @@
 import { withAuth } from "next-auth/middleware";
-import { unAuthMiddleware } from "./middleware/unAuthMiddleware";
-import { authMiddleware } from "./middleware/authMiddleware";
+import { requireUnauthenticated } from "./middleware/requireUnauthenticated";
+import { requireAuthenticatedAndVerified } from "./middleware/requireAuthenticatedAndVerified";
+import { requireAuthenticatedButNotVerified } from "./middleware/requireAuthenticatedButNotVerified";
 import { NextResponse } from "next/server";
-import {
-  DASHBOARD_ROUTE,
-  SIGN_IN_ROUTE,
-  SIGN_UP_ROUTE,
-  VERIFY_EMAIL_ROUTE,
-} from "./constants/routeConfig";
 
 export default withAuth(
   function middleware(req) {
-    const middlewareQueue = [unAuthMiddleware, authMiddleware];
+    const middlewareQueue = [
+      requireUnauthenticated,
+      requireAuthenticatedAndVerified,
+      requireAuthenticatedButNotVerified,
+    ];
     for (const middlewareFunction of middlewareQueue) {
       const middlewareResult = middlewareFunction(req);
       if (middlewareResult.enableRedirection) {
@@ -26,12 +25,3 @@ export default withAuth(
     },
   }
 );
-
-export const config = {
-  matcher: [
-    "/dashboard",
-    "/auth/sign-in",
-    "/auth/sign-up",
-    "/auth/verify-email",
-  ],
-};

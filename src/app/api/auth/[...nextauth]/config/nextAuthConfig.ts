@@ -23,7 +23,7 @@ export const nextAuthOption: NextAuthOptions = {
           username: credentials?.username,
           password: credentials?.password,
         });
-        console.log(user);
+
         if (user) {
           // Any object returned will be saved in `user` property of the JWT
           return user;
@@ -44,7 +44,11 @@ export const nextAuthOption: NextAuthOptions = {
     maxAge: 604800,
   },
   callbacks: {
-    async jwt({ token, user }) {
+    //@ts-ignore
+    async jwt({ token, trigger, session, user }) {
+      if (trigger === "update" && session?.email) {
+        token.email = session.email;
+      }
       return { ...token, ...user };
     },
 
